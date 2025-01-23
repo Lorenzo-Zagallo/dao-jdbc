@@ -10,7 +10,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SellerDaoJDBC implements SellerDao {
 
@@ -44,9 +47,10 @@ public class SellerDaoJDBC implements SellerDao {
               "SELECT seller.*,department.Name as DepName\n"
                       + "FROM seller INNER JOIN department\n"
                       + "ON seller.DepartmentId = department.Id\n"
-                      + "WHERE seller.Id = ?"
-            );
+                      + "WHERE seller.Id = ?");
+
             st.setInt(1, id);
+
             rs = st.executeQuery();
 
             if (rs.next()) {
@@ -86,5 +90,52 @@ public class SellerDaoJDBC implements SellerDao {
     @Override
     public List<Seller> findAll() {
         return List.of();
+    }
+
+    @Override
+    public List<Seller> findByDepartment(Department department) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = conn.prepareStatement(
+                    "SELECT seller.*,department.Name as DepName "
+                    + "FROM seller INNER JOIN department "
+                    + "ON seller.DepartmentId = department.Id "
+                    + "WHERE departmentId = ? "
+                    + "ORDER BY name");
+
+            st.setInt(1, department.getId());
+
+            rs = st.executeQuery();
+
+            List<Seller> list = new ArrayList<>();
+
+            Map<Integer, Department> map = new HashMap<>();
+
+            while (rs.next()) {
+
+//                aqui teremos: se o departamentId já existir, o map.get vai pegar ele
+//                logo o if vai dar falso e eu vou reaproveitar o departamento que já existia
+//                agora, se o departamento não existir, o map.get vai retornar null para a
+//                variável dep, o if dá verdadeiro e aí ele vai instanciar e salvar
+//                o departamento no map
+
+                Department dep = map.get(rs.getInt("departmentId"));
+
+                if (dep == null) {
+                    dep = instantiateDepartment(rs);
+                    map.put(rs.getInt("departmentId"), dep);
+                }
+
+                Seller obj = instantiateSeller(rs, dep);
+                list.add(obj);
+            }
+            return list;
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
     }
 }
