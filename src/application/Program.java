@@ -14,9 +14,6 @@ public class Program {
 
     public static void main(String[] args) {
 
-//        Department obj = new Department(1, "Books");
-//        Seller seller = new Seller(21, "Bob", "bob@gmail.com", new Date(), 3000.0, obj);
-
         SellerDao sellerDao = DaoFactory.createSellerDao();
 
         System.out.println("=== TEST 1: seller findById ===");
@@ -43,7 +40,7 @@ public class Program {
 
         System.out.println("\n=== TEST 5: seller update ===");
         Seller seller3 = sellerDao.findById(1);
-        seller3.setName("Martha Waine");
+        seller3.setName("Martha Wayne");
         sellerDao.update(seller3);
         System.out.println("Update completed!");
 

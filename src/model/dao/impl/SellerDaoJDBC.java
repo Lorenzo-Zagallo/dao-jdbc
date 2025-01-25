@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class SellerDaoJDBC implements SellerDao {
 
-    private Connection conn;
+    private final Connection conn;
 
     public SellerDaoJDBC(Connection conn) {
         this.conn = conn;
@@ -117,9 +117,9 @@ public class SellerDaoJDBC implements SellerDao {
         ResultSet rs = null;
         try {
             st = conn.prepareStatement(
-              "SELECT seller.*,department.Name as DepName\n"
-                      + "FROM seller INNER JOIN department\n"
-                      + "ON seller.DepartmentId = department.Id\n"
+              "SELECT seller.*,department.Name as DepName "
+                      + "FROM seller INNER JOIN department "
+                      + "ON seller.DepartmentId = department.Id "
                       + "WHERE seller.Id = ?");
 
             st.setInt(1, id);
@@ -128,8 +128,7 @@ public class SellerDaoJDBC implements SellerDao {
 
             if (rs.next()) {
                 Department dep = instantiateDepartment(rs);
-                Seller obj = instantiateSeller(rs, dep);
-                return obj;
+                return instantiateSeller(rs, dep);
             }
             return null;
         } catch (SQLException e) {
@@ -221,7 +220,7 @@ public class SellerDaoJDBC implements SellerDao {
             while (rs.next()) {
 
 //                aqui teremos: se o departamentId já existir, o map.get vai pegar ele
-//                logo o if vai dar falso e eu vou reaproveitar o departamento que já existia
+//                logo o if vai dar falso e eu vou reaproveitar o departamento que já existia.
 //                agora, se o departamento não existir, o map.get vai retornar null para a
 //                variável dep, o if dá verdadeiro e aí ele vai instanciar e salvar
 //                o departamento no map

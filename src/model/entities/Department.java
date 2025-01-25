@@ -2,6 +2,7 @@ package model.entities;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 public class Department implements Serializable {
@@ -11,6 +12,7 @@ public class Department implements Serializable {
 
     private Integer id;
     private String name;
+    private List<Seller> seller;
 
     public Department() {
     }
@@ -36,6 +38,14 @@ public class Department implements Serializable {
         this.name = name;
     }
 
+    public List<Seller> getSeller() {
+        return seller;
+    }
+
+    public void setSeller(List<Seller> seller) {
+        this.seller = seller;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -56,4 +66,9 @@ public class Department implements Serializable {
                 ", name='" + name + '\'' +
                 '}';
     }
+
+    public List<Seller> toStringSeller() {
+        return seller;
+    }
+
 }
