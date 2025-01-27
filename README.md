@@ -11,8 +11,7 @@ This is a Java project that demonstrates how to connect to a SQL Server database
 out/              # Compiled output files
 src/              # Source code
   application/    # Entry point classes
-    Program       # Main program for testing DAO operations
-    Program2      # Additional testing class
+    Program       # Main program for testing DAO operations and prompt interface
 
   db/             # Database utility classes
     DB            # Handles database connections
