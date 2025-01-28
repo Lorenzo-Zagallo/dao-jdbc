@@ -51,6 +51,7 @@ db.properties     # Database connection configuration file
 - SQL Server installed and running
 - JDBC driver
 - IntelliJ IDEA (or any Java IDE)
+- SQL Server Management Studio
 
 ---
 
@@ -78,6 +79,44 @@ db.properties     # Database connection configuration file
 ## Usage
 1. Open the `Program` class in `application` package.
 2. Run the program to test the database operations.
+
+---
+## Script to create the database
+```sqlserver
+  CREATE DATABASE cursojdbc
+
+  CREATE TABLE department (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    name NVARCHAR(60)
+  );
+  
+  CREATE TABLE seller (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    name NVARCHAR(60) NOT NULL,
+    email NVARCHAR(100) NOT NULL,
+    birthDate DATETIME NOT NULL,
+    baseSalary DECIMAL(10, 2) NOT NULL,  -- Usando DECIMAL ao invés de DOUBLE
+    departmentId INT NOT NULL,
+    FOREIGN KEY (departmentId) REFERENCES department(id)  -- Corrigido para 'departmentId'
+  );
+
+  INSERT INTO department (name) VALUES 
+    ('Computers'),
+    ('Electronics'),
+    ('Fashion'),
+    ('Books');
+  
+  INSERT INTO seller (name, email, birthDate, baseSalary, departmentId) VALUES 
+    ('Bob Brown', 'bob@gmail.com', '1998-04-21 00:00:00', 1000.00, 1),
+    ('Maria Green', 'maria@gmail.com', '1979-12-31 00:00:00', 3500.00, 2),
+    ('Alex Grey', 'alex@gmail.com', '1988-01-15 00:00:00', 2200.00, 1),
+    ('Martha Red', 'martha@gmail.com', '1993-11-30 00:00:00', 3000.00, 4),
+    ('Donald Blue', 'donald@gmail.com', '2000-01-09 00:00:00', 4000.00, 3),
+    ('Alex Pink', 'bob@gmail.com', '1997-03-04 00:00:00', 3000.00, 2);
+  
+  USE cursojdbc
+```
+
 
 ---
 
